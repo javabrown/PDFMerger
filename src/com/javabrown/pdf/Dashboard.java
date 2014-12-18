@@ -1,6 +1,7 @@
 package com.javabrown.pdf;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -14,7 +15,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -42,7 +46,8 @@ public class Dashboard extends JPanel {
 
 		_listModel = new DefaultListModel();
 		_jList = new JList(_listModel);
-
+		_jList.setCellRenderer(new ListCellRenderer());
+		
 		_addPdfFileBtn = new JButton("Add");
 		_removePdfFileBtn = new JButton("Remove");
 		_joinBtn = new JButton("Join");
@@ -144,4 +149,33 @@ class ImagePanel extends JPanel {
 			g.drawImage(image, 0, 0, null);
 		}
 	}
+}
+
+class ListCellRenderer extends DefaultListCellRenderer {
+    final static ImageIcon shortIcon = 
+    		new ImageIcon("icons/file_extension_pdf.png");
+
+    /* This is the only method defined by ListCellRenderer.  We just
+     * reconfigure the Jlabel each time we're called.
+     */
+    public Component getListCellRendererComponent(
+        JList list,
+        Object value,   // value to display
+        int index,      // cell index
+        boolean iss,    // is the cell selected
+        boolean chf)    // the list and the cell have the focus
+    {
+        /* The DefaultListCellRenderer class will take care of
+         * the JLabels text property, it's foreground and background
+         * colors, and so on.
+         */
+        super.getListCellRendererComponent(list, value, index, iss, chf);
+
+        /* We additionally set the JLabels icon property here.
+         */
+        String s = value.toString();
+        setIcon(shortIcon);
+
+        return this;
+    }
 }
