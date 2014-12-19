@@ -1,6 +1,7 @@
 package com.javabrown.pdf;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -10,26 +11,36 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.UIManager;
 
 public class BoxFrame extends JFrame {
+	static String IMAGE_SITE = "pdf/pdf.png";
+	
 	public BoxFrame() {
 		this.setTitle("JavaBrown - PDF Merge");
 		this.setOSLookAndFeel();
 		this.setSize(300, 300);
+		
 		this.setMinimumSize(new Dimension(300, 300));
 		this.setDefaultCloseOperation(3);
+		
+		this.getLayeredPane().add(
+				new JLabel(new ImageIcon(IMAGE_SITE)), JLayeredPane.PALETTE_LAYER);
+		
 		this.getContentPane().setLayout(new BorderLayout(10, 10));
+		 
 		this.getContentPane().add(new Dashboard(), BorderLayout.CENTER);
 		//this.setLayeredPane(getBackgroundLayer());
+		
+		this.pack();
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 
 	public JLayeredPane getBackgroundLayer() {
-		String IMAGE_SITE = "http://internetofeverything.cisco.com/sites/"
-				+ "default/files/styles/image_text_tile/public/"
-				+ "link_tiles/Marquee_images.png";
+		
 
 		JLayeredPane layeredPanel = new JLayeredPane();
 
@@ -40,7 +51,6 @@ public class BoxFrame extends JFrame {
 			ImagePanel imagePanel = new ImagePanel(image);
 			imagePanel.setSize(layeredPanel.getPreferredSize());
 
-			//layeredPanel.add(imagePanel, JLayeredPane.DEFAULT_LAYER);
 			layeredPanel.add(imagePanel, JLayeredPane.PALETTE_LAYER);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.RandomAccess;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -36,10 +37,11 @@ public class PDFMerger {
 	        merger.addSource(pdfFile);
 	      }
 
-	      merger.setDestinationFileName(outputDirectory + "/result.pdf");
-
 	      try {
-	        merger.mergeDocuments();
+	    	File scratch = new File(System.getProperty("java.io.tmpdir") + "result.pdf");
+	    	
+	    	merger.setDestinationFileName(scratch.getPath());
+	        merger.mergeDocumentsNonSeq(new org.apache.pdfbox.io.RandomAccessFile(scratch, "rw"));
 	        return merger.getDestinationFileName();
 	      } catch (COSVisitorException | IOException e) {
 	        e.printStackTrace();

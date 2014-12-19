@@ -1,6 +1,7 @@
 package com.javabrown.pdf;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -42,6 +43,8 @@ public class Dashboard extends JPanel {
 	private JPanel _controlPanel;
 
 	public Dashboard() {
+		this.setBackground(new Color(0,0,0,125));
+		
 		_pdfMerger = new PDFMerger();
 
 		_listModel = new DefaultListModel();
@@ -115,7 +118,7 @@ public class Dashboard extends JPanel {
 
 				try {
 					Runtime.getRuntime().exec(
-							"explorer.exe /select," + workingDir);
+							"explorer.exe /select," + System.getProperty("java.io.tmpdir"));
 					// Runtime.getRuntime().exec("start "+mergedFileName);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
