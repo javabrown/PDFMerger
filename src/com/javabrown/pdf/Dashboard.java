@@ -21,6 +21,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -28,7 +29,9 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.border.EtchedBorder;
+import javax.swing.plaf.LayerUI;
 
 public class Dashboard extends JPanel {
 	private PDFMerger _pdfMerger;
@@ -41,12 +44,21 @@ public class Dashboard extends JPanel {
 	private JButton _joinBtn;
 	private JButton _resetBtn;
 	private JPanel _controlPanel;
-
-	public Dashboard() {
+	private JBrownProcessLayerUI _busyLayerUI;
+	
+	final Timer stopper = new Timer(4000, new ActionListener() {
+	      public void actionPerformed(ActionEvent ae) {
+	        _busyLayerUI.stop();
+	      }
+	});
+	
+	public Dashboard(JBrownProcessLayerUI layerUI) {
 		this.setBackground(new Color(0,0,0,125));
 		
 		_pdfMerger = new PDFMerger();
-
+		
+		_busyLayerUI = layerUI;
+		
 		_listModel = new DefaultListModel();
 		_jList = new JList(_listModel);
 		_jList.setCellRenderer(new ListCellRenderer());
@@ -107,6 +119,11 @@ public class Dashboard extends JPanel {
 		_joinBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				_busyLayerUI.start();
+				if (!stopper.isRunning()) {
+		            stopper.start();
+		        }
+				
 				String workingDir = System.getProperty("user.dir");
 				System.out.println("wok:=" + workingDir);
 				String mergedFileName = _pdfMerger.merge(workingDir);

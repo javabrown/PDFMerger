@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.net.Socket;
  
 
-public class NativeData {
+public class NativeData implements JBrownConstants {
 	  private String _osInfo;
-	  public static String TEST_URL =
-	      "http://www.javabrown.com/images/brown-logo.png";
+	  
 
 	  public NativeData() {
 	    _osInfo = System.getProperty("os.name").toLowerCase();
