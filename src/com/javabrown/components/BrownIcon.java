@@ -1,6 +1,7 @@
 package com.javabrown.components;
 
 import java.awt.Image;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 
@@ -10,8 +11,8 @@ import javax.swing.ImageIcon;
  * Modified version of ImageIcon to modify the icon size
  */
 public class BrownIcon extends ImageIcon {
-	public BrownIcon(String iconWithPath) {
-		super(iconWithPath);
+	public BrownIcon(URL icon) {
+		super(icon);
 	}
 
 	public ImageIcon getScaledIcon(int width, int height) {
