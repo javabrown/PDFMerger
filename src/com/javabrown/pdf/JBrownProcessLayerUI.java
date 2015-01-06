@@ -128,7 +128,9 @@ public class JBrownProcessLayerUI extends LayerUI<JPanel> implements
 		BufferedImage mazeImage = null;
 				//new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		try {
-			mazeImage = ImageIO.read(new File(BROWN_LOGO));;
+			URL brownLogoUrl = BoxFrame.class.getClassLoader()
+				      .getResource("com/javabrown/resources/brown-logo.png");
+			mazeImage = ImageIO.read(brownLogoUrl);;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

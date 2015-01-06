@@ -77,8 +77,10 @@ public class BoxFrame extends JFrame implements JBrownConstants{
 		
 		menu.setMnemonic(KeyEvent.VK_F);
 		
+		URL aboutIconUrl = BoxFrame.class.getClassLoader()
+			      .getResource("com/javabrown/resources/icon_about.png");
 		JMenuItem about = new JMenuItem("About", 
-				new BrownIcon("icons/icon_about.png").getScaledIcon(25, 25));
+				new BrownIcon(aboutIconUrl).getScaledIcon(25, 25));
 		about.setMnemonic(KeyEvent.VK_A);
 		about.addActionListener(new ActionListener() {
 			@Override
@@ -88,9 +90,10 @@ public class BoxFrame extends JFrame implements JBrownConstants{
 			}
 		});
 		
-		
+		URL exitIconUrl = BoxFrame.class.getClassLoader()
+			      .getResource("com/javabrown/resources/icon_exit.png");
 		JMenuItem exit = new JMenuItem("Exit", 
-				new BrownIcon("icons/icon_exit.png").getScaledIcon(25, 25));
+				new BrownIcon(exitIconUrl).getScaledIcon(25, 25));
 		exit.setMnemonic(KeyEvent.VK_E);
 		exit.addActionListener(new ActionListener() {
 			@Override
@@ -133,10 +136,13 @@ public class BoxFrame extends JFrame implements JBrownConstants{
 		if (nativeInfo.isInternetOn() || true) {
 			ImageIcon icon;
 			try {
-				icon = new ImageIcon(new URL(nativeInfo.TEST_URL));
+				URL brownLogoUrl = BoxFrame.class.getClassLoader()
+					      .getResource("com/javabrown/resources/brown-logo.png");
+				
+				icon = new ImageIcon(brownLogoUrl);
 				this.setIconImage(icon.getImage());
 				System.out.println("set icon");
-			} catch (MalformedURLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
