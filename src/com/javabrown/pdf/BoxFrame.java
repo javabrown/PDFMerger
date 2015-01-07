@@ -86,7 +86,7 @@ public class BoxFrame extends JFrame implements JBrownConstants{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(root,
-				  "Designed & Developed by Raja Khan, Javabrown Foundation");
+				  "Designed & Developed by Raja Khan, JavaBrown Foundation");
 			}
 		});
 		

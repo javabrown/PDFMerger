@@ -31,6 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.LayerUI;
 
 public class Dashboard extends JPanel {
@@ -45,24 +47,24 @@ public class Dashboard extends JPanel {
 	private JButton _resetBtn;
 	private JPanel _controlPanel;
 	private JBrownProcessLayerUI _busyLayerUI;
-	
+
 	final Timer stopper = new Timer(4000, new ActionListener() {
-	      public void actionPerformed(ActionEvent ae) {
-	        _busyLayerUI.stop();
-	      }
+		public void actionPerformed(ActionEvent ae) {
+			_busyLayerUI.stop();
+		}
 	});
-	
+
 	public Dashboard(JBrownProcessLayerUI layerUI) {
-		this.setBackground(new Color(0,0,0,125));
-		
+		this.setBackground(new Color(0, 0, 0, 125));
+
 		_pdfMerger = new PDFMerger();
-		
+
 		_busyLayerUI = layerUI;
-		
+
 		_listModel = new DefaultListModel();
 		_jList = new JList(_listModel);
 		_jList.setCellRenderer(new ListCellRenderer());
-		
+
 		_addPdfFileBtn = new JButton("Add");
 		_removePdfFileBtn = new JButton("Remove");
 		_joinBtn = new JButton("Join");
@@ -94,6 +96,15 @@ public class Dashboard extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser openFile = new JFileChooser();
+
+				openFile.setMultiSelectionEnabled(false);
+
+				FileFilter pdfType = new ExtensionFilter("Pdf Files",
+						new String[] { ".pdf", ".xpdf" });
+				openFile.addChoosableFileFilter(pdfType);
+				openFile.addChoosableFileFilter(pdfType);
+				openFile.setFileFilter(pdfType);
+
 				int returnVal = openFile.showOpenDialog(null);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -121,9 +132,9 @@ public class Dashboard extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				_busyLayerUI.start();
 				if (!stopper.isRunning()) {
-		            stopper.start();
-		        }
-				
+					stopper.start();
+				}
+
 				String workingDir = System.getProperty("user.dir");
 				System.out.println("wok:=" + workingDir);
 				String mergedFileName = _pdfMerger.merge(workingDir);
@@ -135,7 +146,8 @@ public class Dashboard extends JPanel {
 
 				try {
 					Runtime.getRuntime().exec(
-							"explorer.exe /select," + System.getProperty("java.io.tmpdir"));
+							"explorer.exe /select,"
+									+ System.getProperty("java.io.tmpdir"));
 					// Runtime.getRuntime().exec("start "+mergedFileName);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -152,6 +164,41 @@ public class Dashboard extends JPanel {
 			}
 		});
 
+	}
+}
+
+class ExtensionFilter extends javax.swing.filechooser.FileFilter {
+	private String extensions[];
+
+	private String description;
+
+	public ExtensionFilter(String description, String extension) {
+		this(description, new String[] { extension });
+	}
+
+	public ExtensionFilter(String description, String extensions[]) {
+		this.description = description;
+		this.extensions = (String[]) extensions.clone();
+	}
+
+	public boolean accept(File file) {
+		if (file.isDirectory()) {
+			return true;
+		}
+		int count = extensions.length;
+		String path = file.getAbsolutePath();
+		for (int i = 0; i < count; i++) {
+			String ext = extensions[i];
+			if (path.endsWith(ext)
+					&& (path.charAt(path.length() - ext.length()) == '.')) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String getDescription() {
+		return (description == null ? extensions[0] : description);
 	}
 }
 
@@ -172,30 +219,25 @@ class ImagePanel extends JPanel {
 }
 
 class ListCellRenderer extends DefaultListCellRenderer {
-    final static ImageIcon shortIcon = 
-    		new ImageIcon("icons/file_extension_pdf.png");
+	final static ImageIcon shortIcon = new ImageIcon(
+			"icons/file_extension_pdf.png");
 
-    /* This is the only method defined by ListCellRenderer.  We just
-     * reconfigure the Jlabel each time we're called.
-     */
-    public Component getListCellRendererComponent(
-        JList list,
-        Object value,   // value to display
-        int index,      // cell index
-        boolean iss,    // is the cell selected
-        boolean chf)    // the list and the cell have the focus
-    {
-        /* The DefaultListCellRenderer class will take care of
-         * the JLabels text property, it's foreground and background
-         * colors, and so on.
-         */
-        super.getListCellRendererComponent(list, value, index, iss, chf);
+	/*
+	 * This is the only method defined by ListCellRenderer. We just reconfigure
+	 * the Jlabel each time we're called.
+	 */
+	public Component getListCellRendererComponent(JList list, Object value, // value
+																			// to
+																			// display
+			int index, // cell index
+			boolean iss, // is the cell selected
+			boolean chf) // the list and the cell have the focus
+	{
+		super.getListCellRendererComponent(list, value, index, iss, chf);
 
-        /* We additionally set the JLabels icon property here.
-         */
-        String s = value.toString();
-        setIcon(shortIcon);
+		String s = value.toString();
+		setIcon(shortIcon);
 
-        return this;
-    }
+		return this;
+	}
 }

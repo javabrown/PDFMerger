@@ -9,3 +9,7 @@ Swing application to manipulate PDF documents
 
 ###Binary Distributions
   ![Download Latest Build](https://github.com/javabrown/PDFMerger/blob/master/dist/PdfMerger.jar)
+
+###Usages 
+  Open jar as webstart application.
+  Or execute manually using --> java -jar PdfMerger.jar
