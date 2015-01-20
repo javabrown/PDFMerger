@@ -1,16 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Executable Jar for PDFMerger with Jar-in-Jar Loader">
-    <target name="create_run_jar">
-        <jar destfile="C:/git-repo/PDFMeger/PDFMerger/dist/PdfMerger.jar">
-            <manifest>
-                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="com.javabrown.Main"/>
-                <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ pdfbox-app-1.8.7.jar"/>
-            </manifest>
-            <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="C:/git-repo/PDFMeger/PDFMerger/class"/>
-            <zipfileset dir="C:\git-repo\PDFMeger\PDFMerger\lib" includes="pdfbox-app-1.8.7.jar"/>
-        </jar>
-    </target>
+<project default="create_run_jar" basedir="."
+	name="Create Executable Jar for PDFMerger with Jar-in-Jar Loader">
+
+	<property name="src.dir" value="src" />
+	<property name="class.dir" value="class" />
+	<property name="optimize" value="on" />
+	<property name="deprecation" value="off" />
+	<property name="target.java.version" value="1.8" />
+	<property name="src.java.version" value="1.7" />
+	<property name="encoding" value="UTF-8" />
+	<property name="lib.dir" value="lib" />
+
+	<target name="create_run_jar">
+		<jar destfile="C:/git-repo/PDFMeger/PDFMerger/dist/PdfMerger.jar">
+			<manifest>
+				<attribute name="Main-Class"
+					value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
+				<attribute name="Rsrc-Main-Class" value="com.javabrown.Main" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ pdfbox-app-1.8.7.jar" />
+			</manifest>
+			<zipfileset src="jar-in-jar-loader.zip" />
+			<fileset dir="C:/git-repo/PDFMeger/PDFMerger/class" />
+			<zipfileset dir="C:\git-repo\PDFMeger\PDFMerger\lib"
+				includes="pdfbox-app-1.8.7.jar" />
+		</jar>
+	</target>
+
+	<target name="clean" depends="" description="Clean PDFMerger classes.">
+		<delete dir="${class.dir}" />
+	</target>
+
+	<target name="build" depends="clean" description="Compile PDFMerger core classes.">
+		<mkdir dir="${class.dir}" />
+		<javac srcdir="${src.dir}" destdir="${class.dir}" optimize="${optimize}"
+			source="${src.java.version}" debug="on" target="${target.java.version}"
+			deprecation="${deprecation}" encoding="${encoding}">
+			<include name="**/*.java" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="bundle" depends="build">
+		<jar destfile="dist/PdfMerger.jar">
+			<manifest>
+				<attribute name="Main-Class"
+					value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
+				<attribute name="Rsrc-Main-Class" value="com.javabrown.Main" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ pdfbox-app-1.8.7.jar" />
+			</manifest>
+
+			<fileset dir="C:/git-repo/PDFMeger/PDFMerger/class" />
+			<zipfileset dir="C:\git-repo\PDFMeger\PDFMerger\lib"
+				includes="pdfbox-app-1.8.7.jar" />
+		</jar>
+	</target>
+
+	<target name="run" depends="bundle"
+		description="Run the PDFMerger GUI off the jar files">
+		<java classname="com.javabrown.Main" fork="true">
+			<classpath>
+				<pathelement location="dist/PdfMerger.jar" />
+				<pathelement location="lib/pdfbox-app-1.8.7.jar" />
+			</classpath>
+			<sysproperty key="pdf.home" value="${basedir}" />
+		</java>
+	</target>
+
+
+
+
 </project>
