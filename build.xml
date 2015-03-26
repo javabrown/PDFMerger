@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" basedir="."
-	name="Create Executable Jar for PDFMerger with Jar-in-Jar Loader">
+<project default="create_run_jar" basedir="." name="Executable for PDFMerger">
 
 	<property name="optimize" value="on" />
 	<property name="deprecation" value="off" />
